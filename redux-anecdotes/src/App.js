@@ -1,14 +1,22 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addVote } from './reducers/anecdoteReducer'
+import { addVote, addAnecdote } from './reducers/anecdoteReducer'
+import _ from 'lodash'
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => _.orderBy(state,'votes').reverse())
   const dispatch = useDispatch()
 
   const vote = (id) => {
     console.log('vote', id)
     dispatch(addVote(id))
+  }
+
+  const submitAnecdote = event => {
+    event.preventDefault()
+    console.log(event.target.content);
+    dispatch(addAnecdote(event.target.content.value))
+    event.target.content.value = ''
   }
 
   return (
@@ -26,9 +34,9 @@ const App = () => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      <form onSubmit={submitAnecdote} >
+        <div><input name='content' /></div>
+        <button type='submit'>create</button>
       </form>
     </div>
   )
