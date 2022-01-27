@@ -10,4 +10,17 @@ const reducer = (state = intialNotification, action) => {
       }
 }
 
+export const displayNotification = (msg) => {
+  return {
+    type: 'ADD_NOTIFICATION',
+    data: {msg}
+  }
+}
+
+export const clearNotification = () => {
+  return {
+    type: 'CLEAR'
+  }
+}
+
 export default reducer
