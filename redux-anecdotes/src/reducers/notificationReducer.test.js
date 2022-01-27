@@ -2,7 +2,7 @@ import deepFreeze from 'deep-freeze'
 import notify from './notificationReducer'
 import { displayNotification, clearNotification} from './notificationReducer'
 
-describe('anecdote reducer', () => {
+describe('notification reducer', () => {
 
     test('should return an initial notification as empty', () => {
       const action = {

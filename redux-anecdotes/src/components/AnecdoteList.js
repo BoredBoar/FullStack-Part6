@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import _ from 'lodash'
 import Notification from './Notification'
+import Filter from './Filter'
 import { displayNotification, clearNotification } from '../reducers/notificationReducer'
 
 const Anecdote = ({ anecdote, handleClick }) => {
@@ -20,13 +21,16 @@ const Anecdote = ({ anecdote, handleClick }) => {
 }
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector(state => _.orderBy(state.anecdotes,'votes').reverse())
+  const anecdotes = useSelector(state => _(state.anecdotes).filter(anecdote => anecdote.content.includes(state.filter))
+                                                           .orderBy('votes')
+                                                           .reverse().value())
   const dispatch = useDispatch()
 
     return (
       <div>
         <h2>Anecdotes</h2>
         <Notification />
+        <Filter />
         {anecdotes.map(anecdote =>
           <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => {
             dispatch(addVote(anecdote.id))
