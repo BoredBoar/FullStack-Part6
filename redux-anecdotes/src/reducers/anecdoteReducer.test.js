@@ -2,23 +2,46 @@ import deepFreeze from 'deep-freeze'
 import anecdoteReducer from './anecdoteReducer'
 import {addVote, addAnecdote} from './anecdoteReducer'
 
+const anecdotesAtStart = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
+
+const getId = () => (100000 * Math.random()).toFixed(0)
+
+const asObject = (anecdote) => {
+  return {
+    content: anecdote,
+    id: getId(),
+    votes: 0
+  }
+}
+
+const initialState = anecdotesAtStart.map(asObject)
+
 describe('anecdote reducer', () => {
 
 
   test('should return a initial state with 6 default anecdotes', () => {
-    const action = {
-        type: 'DO_NOTHING'
-      }
+    const init = {
+      type: 'INIT_ANECDOTES',
+      data: initialState
+    }
 
-    const newState = anecdoteReducer(undefined, action)
+    const newState = anecdoteReducer(undefined, init)
     expect(newState).toHaveLength(6)
   })
 
   test('adding vote to anecdote should result in incrementing vote total', () => {
-    const nothing = {
-      type: 'DO_NOTHING'
+    const init = {
+      type: 'INIT_ANECDOTES',
+      data: initialState
     }
-    const state = anecdoteReducer(undefined,nothing)
+    const state = anecdoteReducer(undefined,init)
 
     const vote = {
       type: 'ADD_VOTE',
@@ -31,10 +54,11 @@ describe('anecdote reducer', () => {
   })
 
   test('calling the addVote action should also result in incrementing the votes', () => {
-    const nothing = {
-      type: 'DO_NOTHING'
+    const init = {
+      type: 'INIT_ANECDOTES',
+      data: initialState
     }
-    const state = anecdoteReducer(undefined,nothing)
+    const state = anecdoteReducer(undefined,init)
 
     const vote = addVote(state[0].id)
     deepFreeze(state)
@@ -44,10 +68,11 @@ describe('anecdote reducer', () => {
   })
 
   test('a new anecdote can be added to the state by the reducer', () => {
-    const nothing = {
-      type: 'DO_NOTHING'
+    const init = {
+      type: 'INIT_ANECDOTES',
+      data: initialState
     }
-    const state = anecdoteReducer(undefined, nothing)
+    const state = anecdoteReducer(undefined, init)
     deepFreeze(state)
 
     const text = "Don't eat yellow snow"
@@ -64,10 +89,11 @@ describe('anecdote reducer', () => {
   })
 
   test('a new anecdote can be added to the state by the action', () => {
-    const nothing = {
-      type: 'DO_NOTHING'
+    const init = {
+      type: 'INIT_ANECDOTES',
+      data: initialState
     }
-    const state = anecdoteReducer(undefined, nothing)
+    const state = anecdoteReducer(undefined, init)
     deepFreeze(state)
 
     const text = "Don't eat yellow snow"
@@ -78,4 +104,5 @@ describe('anecdote reducer', () => {
 
     expect(newState).toHaveLength(state.length + 1)
   })
+
 })
